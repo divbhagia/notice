@@ -35,6 +35,7 @@
 \RequirePackage[english]{babel}
 \RequirePackage{textcomp}
 %\usepackage{mathpazo}
+
 %\usepackage{mathdesign}
 %\RequirePackage{microtype}
 %\RequirePackage[adobe-utopia]{mathdesign} 
