@@ -144,7 +144,7 @@ ylims = {
     "cons": (0.25, 1.25),
 }
 ydist = {"nm": 1, "inc": 1, "dec": 0.5, "cons": 0.5}
-labels = ["Estimate", "True (Cumulative)", "Observed"]
+labels = ["Estimate", "True (Cumulative)", "Empirical"]
 xticklabs = np.arange(2, T + 1, 2)
 psioptlabs = {
     "inc": "Increasing Hazard",

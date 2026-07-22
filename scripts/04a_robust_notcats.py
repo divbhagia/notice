@@ -180,7 +180,7 @@ for name, data in datasets.items():
 ##########################################################
 
 # Plot aesthetics
-labs = ["Structural", "Baseline", "Observed"]
+labs = ["Structural", "Baseline", "Empirical"]
 text = {key: f"J-Stat: {Jstats[key]:.2f} (p={pvals[key]:.2f})" for key in Jstats.keys()}
 filenames = [f"{OUTPUT_DIR}/fig_notcats{x}.pdf" for x in ["A", "B", "C"]]
 xticklabs = ["0-12", "12-24", "24-36", "36-48"]

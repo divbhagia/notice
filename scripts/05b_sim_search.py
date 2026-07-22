@@ -67,7 +67,7 @@ if __name__ == "__main__":
     psiSE = np.mean(psiSE, axis=0)
 
     # Plot average estimate
-    labs = ["Estimate", "$E[h(d|\\nu)]$", "Observed"]
+    labs = ["Estimate", "$E[h(d|\\nu)]$", "Empirical"]
     xticklabs = ["1", "2", "3", "4"]
     colors = [Colors.BLUE, Colors.RED, Colors.BLACK]
     custom_plot(

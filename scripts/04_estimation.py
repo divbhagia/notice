@@ -62,6 +62,13 @@ print(f"Structural hazard change 1 to 2: {100*psi_dec_1to2:.1f}\n")
 psi_dec_2to3 = (r["psi"][2] - r["psi"][1]) / r["psi"][1]
 print(f"Structural hazard change 2 to 3: {100*psi_dec_2to3:.1f}\n")
 
+# E[theta | L=l, D>=1] from unweighted data: h_unwtd(1|l) / psi_l(1)
+h_unwtd, *_ = data_moms(data_for_est, purpose="output")
+for l in range(J):
+    print(f"E[theta | L={l}, D>=1] = h_unwtd(1|L={l})/psi_{l}(1)"
+          f" = {h_unwtd[0, l]:.4f} / {r['psin'][l]:.4f}"
+          f" = {h_unwtd[0, l] / r['psin'][l]:.4f}")
+
 ##########################################################
 # Baseline estimates table
 ##########################################################
@@ -129,7 +136,7 @@ custom_plot(
     se,
     xlab="Weeks since unemployed",
     ylab="Hazard",
-    legendlabs=["Structural", "Observed"],
+    legendlabs=["Structural", "Empirical"],
     xticklabs=xticklabs,
     colors=[blue, black],
     linestyles=["-", ":"],
@@ -170,7 +177,7 @@ custom_plot(
     se,
     xlab="Weeks since unemployed",
     ylab="Hazard",
-    legendlabs=["Unweighted", "Weighted", "Observed"],
+    legendlabs=["Unweighted", "Weighted", "Empirical"],
     xticklabs=xticklabs,
     colors=[blue, red, black],
     ylims=[-0.05, 0.95],
@@ -240,7 +247,7 @@ custom_plot(
     se,
     xlab="Weeks since unemployed",
     ylab="Hazard",
-    legendlabs=["Log-Logistic", "Non-parametric", "Observed"],
+    legendlabs=["Log-Logistic", "Non-parametric", "Empirical"],
     xticklabs=xticklabs,
     figsize=(4.35, 2.85),
     colors=[blue, red, black],
