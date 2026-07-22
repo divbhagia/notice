@@ -69,7 +69,7 @@ const = mom_const(T, J, nrm, ffopt) if use_const else None
 thta_hat, Jstat = gmm(data_for_est, nrm, ffopt, const=const, ps=ps)
 psiM, muM, _ = unstack(T, J, thta_hat, nrm, ffopt)
 psi_base = np.sum(pi * psiM, axis=1)
-print(Jstat)
+print(f"J-stat (baseline, eta=1): {Jstat:.3f}")
 
 # Upper bound
 ffopt = {"opt": opt, "gamma": gamma, "kappa0_mult": eta_lb}
@@ -77,7 +77,7 @@ const = mom_const(T, J, nrm, ffopt) if use_const else None
 thta_hat, Jstat = gmm(data_for_est, nrm, ffopt, const=const, ps=ps)
 psiM, muM, _ = unstack(T, J, thta_hat, nrm, ffopt)
 psi_ub = np.sum(pi * psiM, axis=1)
-print(Jstat)
+print(f"J-stat (eta = eta_lb = {eta_lb:.3f}): {Jstat:.3f}")
 
 # Fitted h
 h = model_moms(psiM, muM, ffopt)
@@ -92,7 +92,7 @@ const = mom_const(T, J, nrm, ffopt) if use_const else None
 thta_hat, Jstat = gmm(data_for_est, nrm, ffopt, const=const, ps=ps)
 psiM, muM, _ = unstack(T, J, thta_hat, nrm, ffopt)
 psi_lb = np.sum(pi * psiM, axis=1)
-print(Jstat)
+print(f"J-stat (eta = eta_ub = {eta_ub:.3f}): {Jstat:.3f}")
 
 
 ######################################################

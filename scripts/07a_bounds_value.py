@@ -90,7 +90,7 @@ def eta_from_lam2(lam2):
 # Upper bound on eta from the support argument: lambda2 <= 1 / (g1p + g2p)
 lam2_ub = 1 / (g1p + g2p)
 eta_ub = eta_from_lam2(lam2_ub)
-print("Upper bound on eta:", eta_ub)
+print(f"Upper bound on eta: {eta_ub:.3f}")
 eta = np.linspace(0.8, eta_ub, 800)
 
 
@@ -142,7 +142,7 @@ def plot_lam(
 lam2, _ = np.array([x2(e) for e in eta]).T
 feas_eta = eta[lam2 >= 1]
 eta_lb_lam2 = feas_eta[0]
-print("Feasible lower bound (lam2):", eta_lb_lam2)
+print(f"Feasible lower bound (lam2): {eta_lb_lam2:.3f}")
 plot_lam(
     eta,
     lam2,
@@ -163,7 +163,7 @@ lam3, _ = np.array([x3(e) for e in eta_grid]).T
 floor3 = lam2**2
 feas_eta = eta_grid[lam3 >= floor3]
 eta_lb_lam3 = feas_eta[0]
-print("Feasible lower bound (lam3):", eta_lb_lam3)
+print(f"Feasible lower bound (lam3): {eta_lb_lam3:.3f}")
 plot_lam(
     eta_grid,
     lam3,
@@ -185,7 +185,7 @@ lam4, _ = np.array([x4(e) for e in eta_grid]).T
 floor4 = (lam3**2 - 2 * lam2 * lam3 + lam2**3) / (lam2 - 1)
 feas_eta = eta_grid[lam4 >= floor4]
 eta_lb_lam4 = feas_eta[0]
-print("Feasible lower bound (lam4):", eta_lb_lam4)
+print(f"Feasible lower bound (lam4): {eta_lb_lam4:.3f}")
 plot_lam(
     eta_grid,
     lam4,
@@ -199,7 +199,7 @@ plot_lam(
 
 # Save eta bounds for use in other scripts. The lam4 step combined all three
 # inequalities cumulatively, so eta_lb_lam4 is the overall lower bound.
-print("Overall feasible eta range:", (eta_lb_lam4, eta_ub))
+print(f"Overall feasible eta range: [{eta_lb_lam4:.3f}, {eta_ub:.3f}]")
 np.save(f"{QUANTS_DIR}/eta_bounds.npy", np.array([eta_lb_lam4, eta_ub]))
 
 ########################################################################

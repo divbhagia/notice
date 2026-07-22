@@ -127,9 +127,9 @@ def prep_controls(sample):
     controls["dwreas"] = controls["dwreas"].astype(int)
     controls["statefip"] = controls["statefip"].astype(int)
     controls["dyear"] = controls["dyear"].astype(int)
-    controls.loc[:, "educ_cat"] = pd.Categorical(controls["educ_cat"]).codes
-    controls.loc[:, "ind_cat"] = pd.Categorical(controls["ind_cat"]).codes
-    controls.loc[:, "occ_cat"] = pd.Categorical(controls["occ_cat"]).codes
+    controls["educ_cat"] = pd.Categorical(controls["educ_cat"]).codes
+    controls["ind_cat"] = pd.Categorical(controls["ind_cat"]).codes
+    controls["occ_cat"] = pd.Categorical(controls["occ_cat"]).codes
 
     # Hot encode multiple category variables
     catvars = ["dwreas", "occ_cat", "statefip", "dyear", "ind_cat", "educ_cat"]

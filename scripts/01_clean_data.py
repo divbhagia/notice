@@ -116,14 +116,14 @@ df["notice"] = indicator(df["dwnotice"], 4)
 df["race"] = df["race"].apply(lambda x: int(str(x)[0]))
 
 # Generate education categories
-df["educ_cat"] = np.where(df["educ"] <= 72, "Less than HS", np.nan)
+df["educ_cat"] = np.where(df["educ"] <= 72, "Less than HS", None)
 df["educ_cat"] = np.where(df["educ"] == 73, "HS Degree", df["educ_cat"])
 df["educ_cat"] = np.where(
     (80 <= df["educ"]) & (df["educ"] <= 110), "Some College", df["educ_cat"]
 )
 df["educ_cat"] = np.where(df["educ"] == 111, "College", df["educ_cat"])
 df["educ_cat"] = np.where(df["educ"] > 111, "Graduate Degree", df["educ_cat"])
-df["educ_cat"] = np.where(df["educ"] == 999, np.nan, df["educ_cat"])
+df["educ_cat"] = np.where(df["educ"] == 999, None, df["educ_cat"])
 df["hs"] = indicator(df["educ"], 73, "less")
 df["sc"] = indicator(df["educ"], [80, 110], "range")
 df["col"] = indicator(df["educ"], 111, "greater")
