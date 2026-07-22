@@ -7,11 +7,13 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from statsmodels.regression.linear_model import OLS, WLS
+from statsmodels.duration.hazard_regression import PHReg
 
 # Import custom functions and parameters
 from utils.customplot import custom_plot, add_lines_labs, set_plot_aes
 from utils.datadesc import latex, props
 from utils.config import DATA_DIR, OUTPUT_DIR, Colors, CRIT
+from utils.datamoms import data_moms
 
 # Load data
 sample = pd.read_csv(f"{DATA_DIR}/sample.csv")
@@ -177,5 +179,52 @@ plt.ylabel("Exhausted UI Benefits")
 plt.gca().spines["top"].set_visible(False)
 plt.gca().spines["right"].set_visible(False)
 plt.savefig(f"{OUTPUT_DIR}/fig_uiex_break.pdf")
+
+##########################################################
+# Appendix figure: Cox PH X-adjusted exit rates by notice
+##########################################################
+
+X = pd.read_csv(f"{DATA_DIR}/control_vars.csv").values.astype(float)
+D = sample["obsdur"].values.astype(float)
+event = 1 - sample["cens"].values.astype(int)
+L = sample["notice"].values
+
+# Unadjusted hazards (paper's fig_hazard_unwtd estimator)
+h_unadj, _, _, _ = data_moms(
+    sample[["notice", "dur", "cens"]], ps=None, purpose="output"
+)
+
+# X-adjusted hazards: Cox at raw duration, aggregated to 12-week bin edges
+bin_edges = np.array([0.0, 12.0, 24.0, 36.0, 48.0])
+h_adj = np.zeros((len(bin_edges) - 1, 2))
+for l in [0, 1]:
+    mask = L == l
+    m = PHReg(D[mask], X[mask], status=event[mask], ties="breslow").fit()
+    times, cum_haz = np.asarray(m.baseline_cumulative_hazard[0][0]), np.asarray(
+        m.baseline_cumulative_hazard[0][1]
+    )
+    H0 = np.interp(bin_edges, times, cum_haz, left=0.0)
+    S = np.exp(-np.outer(np.exp(X[mask] @ m.params), H0)).mean(axis=0)
+    h_adj[:, l] = 1 - S[1:] / S[:-1]
+
+    # Normalize so adjusted h(1) matches unadjusted h(1)
+    h_adj[:, l] = h_adj[:, l] * (h_unadj[0, l] / h_adj[0, l])
+
+custom_plot(
+    [h_unadj[:, 0], h_adj[:, 0], h_unadj[:, 1], h_adj[:, 1]],
+    xlab="Weeks since unemployed",
+    ylab="Exit rate",
+    legendlabs=[
+        "Short, unadjusted",
+        "Short, adjusted",
+        "Long, unadjusted",
+        "Long, adjusted",
+    ],
+    xticklabs=["0-12", "12-24", "24-36", "36-48"],
+    colors=[Colors.BLACK, Colors.BLACK, Colors.RED, Colors.RED],
+    linestyles=["-", "--", "-", "--"],
+    figsize=(5, 3),
+)
+plt.savefig(f"{OUTPUT_DIR}/fig_cox_haz.pdf")
 
 ##########################################################
