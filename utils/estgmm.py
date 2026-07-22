@@ -3,7 +3,13 @@ from scipy.optimize import minimize
 from utils.datadesc import pred_ps
 from utils.datamoms import data_moms
 from utils.inference import opt_wt_mat, indv_moms, indv_moms_ipw, std_errs
-from utils.esthelpers import unstack, model_moms, numgrad, unstack_all
+from utils.esthelpers import (
+    mom_const,
+    unstack,
+    model_moms,
+    numgrad,
+    unstack_all,
+)
 
 ##########################################################
 # GMM moments & objective function at given parameters
@@ -33,7 +39,7 @@ def objfun(thta, exits, surv, nrm, ffopt, W=None):
 ##########################################################
 
 
-def gmm(data, nrm, ffopt="np", ps=None):
+def gmm(data, nrm, ffopt="np", ps=None, const=None):
 
     # Data moments
     exits, surv, _, _ = data_moms(data, ps)
@@ -58,11 +64,12 @@ def gmm(data, nrm, ffopt="np", ps=None):
         results = minimize(
             objfun,
             thta0,
-            method="L-BFGS-B",
+            method="SLSQP",
             tol=1e-32,
             args=(exits, surv, nrm, ffopt, W),
             options=opts,
             jac=numgrad_wrapper,
+            constraints=const,
         )
         return results.x
 
@@ -86,14 +93,15 @@ def gmm(data, nrm, ffopt="np", ps=None):
 ##########################################################
 
 
-def estimate(data, nrm, ffopt, adj="none", seadj=False):
+def estimate(data, nrm, ffopt, adj="none", seadj=False, use_mom_const=False):
 
     # Estimate
     nL = data["notice"].value_counts().sort_index().values
     T, J = len(data["dur"].unique()) - 1, len(data["notice"].unique())
+    const = mom_const(T, J, nrm, ffopt) if use_mom_const else None
     if adj == "ipw":
         ps, coefs = pred_ps(data)
-        thta_hat, Jstat = gmm(data, nrm, ffopt, ps)
+        thta_hat, Jstat = gmm(data, nrm, ffopt, ps, const)
         thta_all = np.append(thta_hat, coefs)
         if seadj:
             se = std_errs(thta_all, data, nrm, ffopt, MomsFunc=indv_moms_ipw)
@@ -102,7 +110,7 @@ def estimate(data, nrm, ffopt, adj="none", seadj=False):
             se = std_errs(thta_hat, data, nrm, ffopt, MomsFunc=indv_moms)
     elif adj == "none":
         ps, coefs = None, None
-        thta_hat, Jstat = gmm(data, nrm, ffopt)
+        thta_hat, Jstat = gmm(data, nrm, ffopt, ps, const)
         se = std_errs(thta_hat, data, nrm, ffopt, MomsFunc=indv_moms)
     psin, psi, par, mu, psinSE, psiSE, parSE, muSE = unstack_all(
         T, J, nL, thta_hat, se, nrm, ffopt

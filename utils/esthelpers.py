@@ -89,12 +89,21 @@ def psi_baseline(par, T):
 # Note: ignoring error as it occurs due to initial values during optimization
 
 
-def meanshiftkappa(k0, mu):
+def meanshift_add(k0, mu):  # SPECIFIC TO D = 4 & J = 2
     k = np.zeros((4, 2))
     k[0, 1] = k0
     k[1, 1] = k0 * (k0**1 + 2 * mu[0])
     k[2, 1] = k0 * (k0**2 + 3 * mu[0] * k0 + 3 * mu[1])
     k[3, 1] = k0 * (k0**3 + 4 * mu[0] * k0**2 + 6 * mu[1] * k0 + 4 * mu[2])
+    return k
+
+
+def meanshift_mult(k0):  # SPECIFIC TO D = 4 & J = 2
+    k = np.ones((4, 2))
+    k[0, 1] = k0
+    k[1, 1] = k0**2
+    k[2, 1] = k0**3
+    k[3, 1] = k0**4
     return k
 
 
@@ -114,41 +123,42 @@ def unstack(T, J, x, nrm, ffopt="np"):
 
     # Unpack parameters
     if isinstance(ffopt, dict):
-        if "gamma" in ffopt.keys():
-            gamma = ffopt["gamma"]
-        if "kappa" in ffopt.keys():
-            kappa = ffopt["kappa"]
+        gamma = ffopt.get("gamma", gamma)
+        kappa = ffopt.get("kappa", kappa)
 
-    # Non-parametric
-    if opt == "np":
-        psin = x[:J]
-        mu = np.zeros(T)
-        mu[0] = nrm
-        mu[1:T] = x[J : J + T - 1]
-        psi = x[J + T - 1 :]
-        if isinstance(ffopt, dict):
-            if "kappa0" in ffopt.keys():
-                kappa = meanshiftkappa(ffopt["kappa0"], mu)
-        for j in range(J):
-            muM[:, j] = mu + kappa[:, j]
-            psiM[:, j] = np.concatenate(([psin[j]], psi * gamma[:, j]))
-        return psiM, muM
+    # Extract common parameters
+    psin = x[:J]
+    mu = np.zeros(T)
+    mu[0] = nrm
+    mu[1:T] = x[J : J + T - 1]
 
-    # Baseline
+    # Compute psi based on option
     if opt == "baseline":
-        psin = x[:J]
-        mu = np.zeros(T)
-        mu[0] = nrm
-        mu[1:T] = x[J : J + T - 1]
         par = x[J + T - 1 :]
         psi = psi_baseline(par, T)
-        if isinstance(ffopt, dict):
-            if "kappa0" in ffopt.keys():
-                kappa = meanshiftkappa(ffopt["kappa0"], mu)
+    else:  # "np"
+        psi = x[J + T - 1 :]
+        par = None
+
+    # Apply kappa shifts and build muM
+    if isinstance(ffopt, dict) and "kappa0_add" in ffopt:
+        kappa = meanshift_add(ffopt["kappa0_add"], mu)
         for j in range(J):
             muM[:, j] = mu + kappa[:, j]
-            psiM[:, j] = np.concatenate(([psin[j]], psi * gamma[:, j]))
-        return psiM, muM, par
+    elif isinstance(ffopt, dict) and "kappa0_mult" in ffopt:
+        kappa = meanshift_mult(ffopt["kappa0_mult"])
+        for j in range(J):
+            muM[:, j] = mu * kappa[:, j]
+    else:
+        for j in range(J):
+            muM[:, j] = mu
+
+    # Build psiM
+    for j in range(J):
+        psiM[:, j] = np.concatenate(([psin[j]], psi * gamma[:, j]))
+
+    # Return
+    return (psiM, muM, par)
 
 
 ##########################################################
@@ -182,12 +192,8 @@ def unstack_all(T, J, nL, thta, se, nrm, ffopt="np"):
     psiSE = np.zeros(T)
 
     # Unstack parameters
-    if ffopt == "np":
-        psiM, muM = unstack(T, J, thta, nrm, ffopt)
-        mu = muM[:, 0]
-    elif ffopt == "baseline":
-        psiM, muM, par = unstack(T, J, thta, nrm, ffopt)
-        mu = muM[:, 0]
+    psiM, muM, par = unstack(T, J, thta, nrm, ffopt)
+    mu = muM[:, 0]
 
     # Unstack parameters further
     psin = psiM[0, :]
@@ -215,4 +221,30 @@ def unstack_all(T, J, nL, thta, se, nrm, ffopt="np"):
     return psin, psi, par, mu, psinSE, psiSE, parSE, muSE
 
 
+##########################################################
+# Moment constraints for optimization
+##########################################################
+
+
+def mom_ineq(mu):
+    return np.array(
+        [
+            mu[1] - mu[0] ** 2,
+            mu[2] - mu[1] ** 2,
+            mu[3] * (mu[1] - mu[0] ** 2) - mu[2] ** 2 + 2 * mu[1] * mu[2] - mu[1] ** 3,
+        ]
+    )
+
+
+def mom_const(T, J, nrm, ffopt):
+
+    def c_fun(x):
+        _, muM, _ = unstack(T, J, x, nrm, ffopt)
+        mu = np.min(muM, axis=1)
+        return mom_ineq(mu)
+
+    return [{"type": "ineq", "fun": c_fun}]
+
+
+## MODIFY mom_ineq SO IT IS APPROPRIATE FOR D>4
 ##########################################################
