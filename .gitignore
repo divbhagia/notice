@@ -5,10 +5,10 @@ __pycache__/
 data/
 logs/
 archive/
-# draft/*
+draft/*
 draft/.texpadtmp
-# !draft/figures_and_tables.tex
-# !draft/div.cls
+!draft/figures_and_tables.tex
+!draft/div.cls
 scripts/quants/
 tests/quants/
 review/

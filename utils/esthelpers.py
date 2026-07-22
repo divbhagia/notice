@@ -126,6 +126,24 @@ def unstack(T, J, x, nrm, ffopt="np"):
         gamma = ffopt.get("gamma", gamma)
         kappa = ffopt.get("kappa", kappa)
 
+    # If opt_eta is set, override gamma/kappa based on the requested parameterization:
+    #   opt_eta = "kappa" -> kappa = eta (scale-shift on types), gamma = 1
+    #   opt_eta = "gamma" -> gamma = eta on long group, kappa = 1
+    if isinstance(ffopt, dict) and "opt_eta" in ffopt:
+        eta_val = ffopt.get("eta", 1.0)
+        if ffopt["opt_eta"] == "kappa":
+            gamma = np.ones((T - 1, J))
+            ffopt = dict(ffopt)
+            ffopt["kappa0_mult"] = eta_val
+        elif ffopt["opt_eta"] == "gamma":
+            gamma = np.ones((T - 1, J))
+            gamma[:, 1] = eta_val
+            ffopt = dict(ffopt)
+            ffopt.pop("kappa0_mult", None)
+            ffopt.pop("kappa0_add", None)
+        else:
+            raise ValueError(f"Unknown opt_eta: {ffopt['opt_eta']}")
+
     # Extract common parameters
     psin = x[:J]
     mu = np.zeros(T)

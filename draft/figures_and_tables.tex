@@ -388,49 +388,36 @@ Duration & Observations & Recieved UI Benefits \\
 \renewcommand{\thetable}{E\arabic{table}}
 \renewcommand{\thefigure}{E\arabic{figure}}
 
-% FIGURE: Alternative Assumptions on Heterogeneity Distribution
-\begin{figure}[p]\caption{Allow average type to vary}\label{fig_genHet}
-\begin{subfigure}{.475\textwidth}
-\includegraphics{\outdir/fig_extgen_hetA}
-\subcaption{Residuals}
-\end{subfigure} 
-\begin{subfigure}{.475\textwidth}
-\includegraphics{\outdir/fig_extgen_hetB}
-\subcaption{10 lowest-residual estimates}
-\end{subfigure} 
-\floatfoot{\textit{Note:} The figure presents results from the estimation of a more generalized Mixed Hazard model, where the mean of the heterogeneity distribution for individuals with different lengths of notice is allowed to vary according to the parameter $\kappa_1$. Panel A presents the residuals from GMM estimation for different values of $\kappa_1$. Panel B presents the structural hazard estimates from the 10 best models with the lowest-valued residuals (light grey lines), compared to the baseline estimate (solid line) and the observed hazard in the data (dashed line).}
-\end{figure} 
+% FIGURE: Identifying restrictions as functions of the composite parameter $\eta$
+\begin{figure}[p]\caption{Moment Inequalities Bounding $\eta$}\label{fig_sen_ineqs}
+\centering
+\begin{subfigure}{0.3333\textwidth}
+  \centering
+  \includegraphics{\outdir/fig_sen_ineq1.pdf}
+  \caption{$\lambda_2(\eta)$ vs.\ 1}
+  \label{fig:sen_ineq1}
+\end{subfigure}\hfill
+\begin{subfigure}{0.3333\textwidth}
+  \centering
+  \includegraphics{\outdir/fig_sen_ineq2.pdf}
+  \caption{$\lambda_3(\eta)$ vs.\ $\lambda_2(\eta)^2$}
+  \label{fig:sen_ineq2}
+\end{subfigure}\hfill
+\begin{subfigure}{0.3333\textwidth}
+  \centering
+  \includegraphics{\outdir/fig_sen_ineq3.pdf}
+  \caption{$\lambda_4(\eta)$ vs. Hankel Floor}
+  \label{fig:sen_ineq3}
+\end{subfigure}
+\label{fig:sen_ineq}
+\floatfoot{\textit{Note:} The panels show the restrictions that partially identify the composite parameter $\eta=\gamma\kappa$. Given $\eta$, the model is just-identified, so the moments of the implied type distribution are recovered as functions of $\eta$; admissible values are those for which these moments are valid, i.e.\ correspond to a non-negative type distribution. Each panel plots one of the moment inequalities: panel (a) the second normalized moment $\lambda_2(\eta)$ against the variance bound of one; panel (b) the third moment $\lambda_3(\eta)$ against $\lambda_2(\eta)^2$; and panel (c) the fourth moment $\lambda_4(\eta)$ against the floor implied by positive semidefiniteness of the Hankel matrix. The upper bound $\overline{\eta}=1.29$ follows from the bounded support of $\nu$.}
+\end{figure}
 
 % FIGURE: Alternative Assumptions on Structural Hazards
-\begin{figure}[p]\caption{Allow structural hazards after the first period to vary}\label{fig_genStr}
-\makebox[\textwidth]{
-\begin{subfigure}{.475\textwidth}
-\includegraphics{\outdir/fig_extgen_strhazA.pdf}
-\subcaption{Residuals}
-\end{subfigure} 
-\begin{subfigure}{.475\textwidth}
-\includegraphics{\outdir/fig_extgen_strhazB.pdf}
-\subcaption{10 lowest-residual estimates}
-\end{subfigure} 
-\floatfoot{\textit{Note:}  The figure presents results from the estimation of a more generalized Mixed Hazard model, where the structural hazard after the initial period for individuals with different lengths of notice is allowed to vary according to the parameter $\gamma$. Panel A presents the residuals from GMM estimation for different values of $\gamma$. Panel B presents the structural hazard estimates from the 10 best models with the lowest-valued residuals (light grey lines), compared to the baseline estimate (solid line) and the observed hazard in the data (dashed line).}
-}
+\begin{figure}[p]\caption{Estimates Implied by Bounds}\label{fig_sen}
+\includegraphics{\outdir/fig_sensitivity.pdf}
+\floatfoot{\textit{Note:} The figure presents structural hazard estimates from the more generalized model in which the conditional independence and stationarity assumptions are relaxed, with the relaxation governed by a single composite parameter $\eta=\gamma\kappa$ that is partially identified by the requirement that the implied type distribution be valid. The shaded band spans the estimates between the bounds on $\eta$, compared to the baseline estimate (solid) and the observed hazard in the data (dashed).}
 \end{figure} 
-
-
-% FIGURE: Alternative Assumptions on Structural Hazards and Distribution of Heterogeneity
-\begin{figure}[p]\caption{Alternative Assumptions on Structural Hazards and Heterogeneity Distribution}\label{fig_genHetStr}
-\makebox[\textwidth]{
-\begin{subfigure}{.475\textwidth}
-\includegraphics{\outdir/fig_extgen_bothA.pdf}
-\subcaption{Residuals}
-\end{subfigure} \hspace{1em}
-\begin{subfigure}{.475\textwidth}
-\includegraphics{\outdir/fig_extgen_bothB.pdf}
-\subcaption{25 lowest-residual estimates}
-\end{subfigure} 
-\floatfoot{\textit{Note:}  The figure presents results from the estimation of a more generalized Mixed Hazard model. The mean of the heterogeneity distribution for individuals with different lengths of notice is allowed to vary according to the parameter $\kappa_1$. The structural hazard after the initial period for individuals with different lengths of notice is allowed to vary according to the parameter $\gamma$. Panel A presents the residuals from GMM estimation for different values of $\kappa_1$ and $\gamma$. Panel B presents the structural hazard estimates from the 25 best models with the lowest-valued residuals (light grey lines), compared to the baseline estimate (solid line) and the observed hazard in the data (dashed line).} 
-}
-\end{figure}
 
 %%%%%%%%%%%%%%%%%%%% Appendix: Search Model
 \setcounter{table}{0}

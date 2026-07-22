@@ -29,12 +29,13 @@ init_data:
 	python ./scripts/01_clean_data.py
 	echo "Data processing done."
 
-# Run scripts for the main program
-mainprog: 
+# Run scripts for the main program (log saved to output/mainprog.log)
+mainprog:
+	mkdir -p ./output
 	for script in $(SCRIPTS); do \
 		echo $$script; \
 		python $$script; \
-	done
+	done 2>&1 | tee ./output/mainprog.log
 
 # Compile manuscript
 manuscript:

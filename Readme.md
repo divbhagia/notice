@@ -70,11 +70,12 @@ Table C2 | `03a_summary_stats.py` |
 Figures C2, C3 | `03d_add_desc.py` |
 Table C3 | `03c_reg_tables.py`  |
 Table C4, Figure C4 | `03d_add_desc.py` |
-Figure C5 | `03b_hazard_plots.py`  |
+Figure C5 | `03d_add_desc.py` |
+Figure C6 | `03b_hazard_plots.py`  |
 Figures D1, D3, D4 | `04_estimation.py` |
 Figure D2 | `04a_robust_notcats.py` |
 Figures D5, D6 | `06_binning_duration.py` |
-Figures E1, E2, E3 | `07_extension.py` |
+Figures E1, E2 | `07a_bounds_value.py`, `07b_bounds_est.py` |
 Figures F1, F2 | `05b_sim_search.py` |
 
 

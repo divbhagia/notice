@@ -105,8 +105,9 @@
 \RequirePackage{indentfirst}
 \setlength{\parindent}{1em}					% Paragraph Indentation
 \setlength{\skip\footins}{1cm} 				% Footnote Space
-\setlength{\parskip}{2mm} 						% Paragraph Skip
-\setstretch{1.5} 								   % Line Space
+\setlength{\parskip}{2mm} 					% Paragraph Skip
+%\setstretch{2} 							% Line Space
+\doublespacing
 \RequirePackage[margin=1.25in]{geometry} 	% Margins
 
 
@@ -143,7 +144,7 @@
 \makeatletter
 \ifdefined\pdfoutput
 	\ExplSyntaxOn
-	\cs_new:Npn \expandableinput #1  % providing \expandableinput
+	\cs_gset:Npn \expandableinput #1  % override kernel/prior definition
   	{ \use:c { @@input } { \file_full_name:n {#1} } }
   	\AddToHook{env/tabular/begin}  % add to tabular 
   	{ \cs_set_eq:NN \input \expandableinput }

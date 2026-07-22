@@ -2,7 +2,6 @@
 DOWNLOAD_RAW = False
 EXTRACT_IPUMS = False
 SIM_SM_AGAIN = False
-RUN_EXT_AGAIN = False
 SIMBIN_AGAIN = False
 
 # Download link for the raw data
