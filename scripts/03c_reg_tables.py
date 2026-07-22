@@ -49,7 +49,6 @@ for v in range(len(vars)):
     var = vars[v]
     coefs = np.array(4 * [""], dtype="<U16")
     se = np.array(4 * [""], dtype="<U16")
-    rsq = np.array(4 * [""], dtype="<U16")
 
     # Sample for earnings regression
     if v == 2:
@@ -69,17 +68,13 @@ for v in range(len(vars)):
         sig_ast = sig_asterisk(model.pvalues["notice"])
         coefs[i] = f"{model.params['notice']:.3f}{sig_ast}"
         se[i] = f"({model.bse['notice']:.3f})"
-        rsq[i] = f"{model.rsquared:.3f}"
 
     # Write to file
     coefs = np.insert(coefs, 0, "> 2 month notice")
     se = np.insert(se, 0, " ")
-    rsq = np.insert(rsq, 0, "$R^2$")
     with open(f"{OUTPUT_DIR}/{files[v]}.tex", "w") as f:
         f.write(" & ".join(coefs) + "\\\\" + "\n")
         f.write(" & ".join(se) + "\\\\")
-        f.write("\\addlinespace[1ex]")
-        f.write(" & ".join(rsq) + "\\\\")
 
     # Write number of observations
     nobs = [f"{model.nobs:.0f}" for model in models]
