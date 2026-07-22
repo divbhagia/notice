@@ -1,0 +1,193 @@
+./scripts/02_sample_and_ipw.py
+------------------------------------------  -----
+DWS 1996-2020, 21-64 year old respondents   44707
+No recall expectation                       44537
+Lost job was not self-employment            43471
+Non-missing values for variables used       29443
+Worked full-time at lost job                25293
+Employed for at least 6 months at lost job  22991
+Had health insurance at lost job            14825
+Held less than 3 jobs since lost job        13784
+Got a notice before job loss                 5898
+Got a notice of >1 month                     4175
+------------------------------------------  -----
+[1mObservations with 0.1<PS<0.9: 4175/4175[0m
+./scripts/03a_summary_stats.py
+./scripts/03b_hazard_plots.py
+./scripts/03c_reg_tables.py
+Mean of h0 by notice: notice
+0.0    0.147014
+1.0    0.240523
+Name: 1, dtype: float64
+Mean of h0to12 by notice: notice
+0.0    0.487494
+1.0    0.565884
+Name: 1, dtype: float64
+./scripts/03d_add_desc.py
+./scripts/04_estimation.py
+PS match: True
+Coefs match: True
+Obs hazard change 1 to 2: -43.6
+
+Structural hazard change 1 to 2: -33.6
+
+Structural hazard change 2 to 3: 75.3
+
+E[theta | L=0, D>=1] = h_unwtd(1|L=0)/psi_0(1) = 0.4875 / 0.4884 = 0.9980
+E[theta | L=1, D>=1] = h_unwtd(1|L=1)/psi_1(1) = 0.5659 / 0.5595 = 1.0114
+./scripts/04a_robust_notcats.py
+Variable            1        2        3        4
+------------  -------  -------  -------  -------
+age             42.3     41.13    42.44    43.57
+female           0.37     0.41     0.45     0.46
+married          0.58     0.57     0.59     0.63
+black            0.07     0.11     0.1      0.09
+col              0.33     0.36     0.41     0.39
+pc               0.25     0.33     0.46     0.62
+union            0.1      0.16     0.15     0.16
+in_metro         0.81     0.82     0.84     0.82
+dwyears          5.87     5.6      7.12     9.18
+lnearnl          6.5      6.46     6.54     6.56
+Observations  7886     1723     1959     2216
+Variable       1      2      3    4
+----------  ----  -----  -----  ---
+age         1.27   2.44   1.13    0
+female      0.09   0.05   0.01    0
+married     0.05   0.06   0.04    0
+black       0.02  -0.02  -0.01    0
+col         0.06   0.03  -0.02    0
+pc          0.37   0.29   0.16    0
+union       0.06   0      0.01    0
+in_metro    0.01   0     -0.02    0
+dwyears     3.31   3.58   2.06    0
+lnearnl     0.06   0.1    0.02    0
+
+[1mKeep observations with 0.1<PS<0.9: 7122/12061[0m
+  Notice    Extreme    Total     Share
+--------  ---------  -------  --------
+       1       4171     7886  0.528912
+       3        487     1959  0.248596
+       4        281     2216  0.126805
+
+
+[1mKeep observations with 0.1<PS<0.9: 5667/5898[0m
+  Notice    Extreme    Total      Share
+--------  ---------  -------  ---------
+       2        141     1723  0.081834
+       3         67     1959  0.0342011
+       4         23     2216  0.0103791
+
+
+[1mKeep observations with 0.1<PS<0.9: 5708/5898[0m
+  Notice    Extreme    Total       Share
+--------  ---------  -------  ----------
+       3        173     3682  0.0469853
+       4         17     2216  0.00767148
+
+
+[1mKeep observations with 0.1<PS<0.9: 4175/4175[0m
+  Notice    Extreme    Total    Share
+--------  ---------  -------  -------
+       3          0     1959        0
+       4          0     2216        0
+
+
+DATA_134 Unweighted
+| age         | 43.05 | 42.71 | 43.72 | -0.34    | 1.01***  |
+| dwreas_2    |  0.07 |  0.06 |  0.03 | -0.01    | -0.03*** |
+| dwreas_3    |  0.45 |  0.34 |  0.27 | -0.10*** | -0.07*** |
+| dwyears     |  7.78 |  7.98 |  9.68 | 0.20     | 1.70***  |
+| dyear_1999  |  0.06 |  0.05 |  0.07 | -0.01    | 0.02***  |
+| dyear_2008  |  0.03 |  0.03 |  0.02 | 0.00     | -0.02*** |
+| dyear_2009  |  0.07 |  0.09 |  0.06 | 0.01     | -0.03*** |
+| educ_cat_4  |  0.3  |  0.27 |  0.31 | -0.03**  | 0.04***  |
+| ind_cat_1   |  0.02 |  0    |  0.01 | -0.01*** | 0.01**   |
+| ind_cat_3   |  0.29 |  0.29 |  0.36 | -0.00    | 0.06***  |
+| occ_cat_3   |  0.12 |  0.12 |  0.16 | 0.00     | 0.04***  |
+| occ_cat_4   |  0.03 |  0.04 |  0.02 | 0.00     | -0.02*** |
+| statefip_34 |  0.02 |  0.04 |  0.03 | 0.02***  | -0.02**  |
+| union       |  0.1  |  0.17 |  0.17 | 0.06***  | 0.00     |
+
+DATA_134 Weighted
+| dwreas_2  | 0.05 | 0.07 | 0.05 | 0.02***  | -0.02** |
+| ind_cat_1 | 0.02 | 0.01 | 0.01 | -0.01*** | 0.01**  |
+
+DATA_234 Unweighted
+| age         | 41.38 | 42.56 | 43.65 | 1.18***  | 1.09***  |
+| dwreas_2    |  0.27 |  0.15 |  0.08 | -0.12*** | -0.07*** |
+| dwreas_3    |  0.37 |  0.37 |  0.29 | 0.00     | -0.08*** |
+| dwyears     |  5.91 |  7.3  |  9.25 | 1.38***  | 1.95***  |
+| dyear_1997  |  0.04 |  0.04 |  0.06 | -0.01    | 0.02***  |
+| dyear_1999  |  0.06 |  0.05 |  0.07 | -0.01    | 0.02***  |
+| dyear_2001  |  0.12 |  0.08 |  0.09 | -0.04*** | 0.01     |
+| dyear_2008  |  0.04 |  0.04 |  0.02 | -0.00    | -0.01*** |
+| dyear_2009  |  0.1  |  0.09 |  0.07 | -0.00    | -0.03*** |
+| ind_cat_1   |  0.05 |  0.03 |  0.03 | -0.02*** | -0.00    |
+| ind_cat_2   |  0.09 |  0.12 |  0.14 | 0.04***  | 0.02*    |
+| ind_cat_3   |  0.28 |  0.28 |  0.34 | 0.00     | 0.06***  |
+| ind_cat_6   |  0.1  |  0.1  |  0.08 | 0.00     | -0.03*** |
+| lnearnl     |  6.48 |  6.55 |  6.57 | 0.06***  | 0.02     |
+| occ_cat_3   |  0.14 |  0.12 |  0.15 | -0.02**  | 0.03***  |
+| occ_cat_4   |  0.05 |  0.04 |  0.02 | -0.01*   | -0.02*** |
+| occ_cat_6   |  0.07 |  0.05 |  0.05 | -0.02*** | 0.00     |
+| statefip_2  |  0.01 |  0.01 |  0.01 | 0.01*    | -0.01*** |
+| statefip_33 |  0.01 |  0.03 |  0.02 | 0.02***  | -0.01    |
+| statefip_39 |  0.04 |  0.03 |  0.05 | -0.01*   | 0.02***  |
+
+DATA_234 Weighted
+
+
+DATA_23C4 Unweighted
+| age         | 41.93 | 43.62 | 1.68***  |
+| dwreas_2    |  0.21 |  0.08 | -0.13*** |
+| dwreas_3    |  0.37 |  0.29 | -0.08*** |
+| dwyears     |  6.62 |  9.23 | 2.61***  |
+| dyear_1997  |  0.04 |  0.06 | 0.02***  |
+| dyear_1999  |  0.05 |  0.07 | 0.02***  |
+| dyear_2008  |  0.04 |  0.02 | -0.02*** |
+| dyear_2009  |  0.1  |  0.07 | -0.03*** |
+| ind_cat_1   |  0.04 |  0.03 | -0.02*** |
+| ind_cat_2   |  0.1  |  0.14 | 0.03***  |
+| ind_cat_3   |  0.28 |  0.34 | 0.06***  |
+| ind_cat_6   |  0.1  |  0.08 | -0.02*** |
+| lnearnl     |  6.51 |  6.57 | 0.06***  |
+| married     |  0.59 |  0.63 | 0.05***  |
+| occ_cat_1   |  0.38 |  0.42 | 0.04***  |
+| occ_cat_4   |  0.05 |  0.02 | -0.02*** |
+| statefip_44 |  0.01 |  0.02 | 0.01***  |
+| statefip_9  |  0.02 |  0.03 | 0.01***  |
+
+DATA_23C4 Weighted
+
+
+DATA_34 Unweighted
+| age         | 42.44 | 43.57 | 1.13***  |
+| dwreas_2    |  0.18 |  0.09 | -0.09*** |
+| dwreas_3    |  0.36 |  0.29 | -0.07*** |
+| dwyears     |  7.12 |  9.18 | 2.06***  |
+| dyear_1997  |  0.03 |  0.06 | 0.02***  |
+| dyear_1999  |  0.05 |  0.07 | 0.02***  |
+| dyear_2008  |  0.04 |  0.03 | -0.01*** |
+| dyear_2009  |  0.1  |  0.07 | -0.03*** |
+| ind_cat_3   |  0.28 |  0.34 | 0.06***  |
+| ind_cat_6   |  0.11 |  0.08 | -0.03*** |
+| occ_cat_3   |  0.12 |  0.15 | 0.03***  |
+| occ_cat_4   |  0.04 |  0.03 | -0.02*** |
+| statefip_39 |  0.03 |  0.05 | 0.02***  |
+| statefip_44 |  0.01 |  0.02 | 0.01***  |
+
+DATA_34 Weighted
+
+./scripts/05a_search_model.py
+./scripts/05b_sim_search.py
+./scripts/06_binning_duration.py
+./scripts/07a_bounds_value.py
+Upper bound on eta: 1.286
+Feasible lower bound (lam2): 0.934
+Feasible lower bound (lam3): 1.066
+Feasible lower bound (lam4): 1.121
+Overall feasible eta range: [1.121, 1.286]
+./scripts/07b_bounds_est.py
+J-stat (baseline, eta=1): 0.188
+J-stat (eta = eta_lb = 1.121): 0.307
+J-stat (eta = eta_ub = 1.286): 2.842
